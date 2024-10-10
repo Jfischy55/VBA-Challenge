@@ -10,3 +10,7 @@ I tried looking at a couple different people's codes online to fix my issues, bu
 I also don't have any more time to work on the assignment, getting ready for a wedding and will be missing class tomorrow.
 
 Figure I might as well submit what I have though it isn't much and doesn't fully work.
+
+I'll list the two sources I used to attempt to complete the assignment below.
+    https://github.com/ermiasgelaye/VBA-challenge/blob/master/VBA_Stock_data/Stock_Market_Analysiss.vbs
+    https://stackoverflow.com/questions/62471422/vba-loop-how-to-get-ticker-symbols-into-ticker-column
