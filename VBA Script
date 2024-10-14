@@ -1,0 +1,163 @@
+Option Explicit
+
+Sub Stock_Data()
+
+    Dim ws As Worksheet
+    For Each ws In Worksheets
+    
+        ws.Range("I1").Value = "Ticker"
+        ws.Range("J1").Value = "Quartely Change"
+        ws.Range("K1").Value = "Percent Change"
+        ws.Range("L1").Value = "Total Stock Volume"
+        ws.Range("P1").Value = "Ticker"
+        ws.Range("Q1").Value = "Value"
+        ws.Range("O2").Value = "Greatest % Increase"
+        ws.Range("O3").Value = "Greatest % Decrease"
+        ws.Range("O4").Value = "Greatest Total Volume"
+        
+        Dim ticker As String
+        ticker = " "
+        
+        Dim Ticker_Row As Long
+        Ticker_Row = 1
+        
+        Dim Ticker_Volume As Double
+        Ticker_Volume = 0
+        
+        Dim Quarterly_Change As Double
+        Quarterly_Change = 0
+        
+        Dim Stock_Volume As Double
+        Stock_Volume = 0
+        
+        Dim LastRow As Long
+        LastRow = ws.Cells(Rows.Count, 1).End(xlUp).row
+        Dim row As Long
+        row = 2
+        Dim j As Long
+        j = ws.Cells(row, 10).Value
+        Dim k As Long
+        k = ws.Cells(row, 11).Value
+        
+        Dim open_price As Double
+        open_price = 0
+        
+        Dim Closing_Price As Double
+        Closing_Price = 0
+        
+        Dim Price_Change As Double
+        Price_Change = 0
+        
+        Dim Price_Percent_Changed As Double
+        Price_Percent_Changed = 0
+        
+        Dim End_Percent_Change As Double
+        
+        
+        For row = 2 To LastRow
+            
+            If ws.Cells(row + 1, 1).Value <> ws.Cells(row, 1).Value Then
+                ticker = ws.Cells(row, 1).Value
+                ws.Cells(Ticker_Row, "I").Value = ticker
+                Ticker_Row = Ticker_Row + 1
+                
+                open_price = ws.Cells(row, 3).Value
+                Closing_Price = ws.Cells(row, 6).Value
+                
+                For j = Ticker_Row To row
+                    Ticker_Volume = Ticker_Volume + ws.Cells(row, 7).Value
+                    
+                Next j
+                
+                If open_price = 0 Then
+                    Price_Percent_Changed = Closing_Price
+                    
+                Else
+                    Quarterly_Change = Closing_Price - open_price
+                    ws.Cells(row, 10).Value = Quarterly_Change
+                    Price_Percent_Changed = Quarterly_Change / open_price
+                    
+                End If
+                
+                ws.Cells(row, 11).Value = Price_Percent_Changed
+                ws.Cells(row, 11).NumberFormat = "0.00%"
+                
+                ws.Cells(row, 12).Value = Ticker_Volume
+                
+                row = row + 1
+                Ticker_Volume = 0
+                Quarterly_Change = 0
+                Price_Percent_Changed = 0
+                
+                Ticker_Row = row
+                
+            End If
+            
+        Next row
+        
+        For k = 3 To LastRow
+            
+            End_Percent_Change = ws.Cells(Rows.Count, "K").End(xlUp).row
+            
+            Dim Increase As Double
+            Increase = 0
+            
+            Dim Decrease As Double
+            Decrease = 0
+            
+            Dim Greatest As Double
+            Greatest = 0
+            
+            Dim last_k As Double
+            last_k = row - 1
+            
+            Dim current_k As Double
+            current_k = ws.Cells(k, 11).Value
+            
+            Dim previous_k As Double
+            previous_k = ws.Cells(last_k, 11).Value
+            
+            Dim volume_k As Double
+            volume_k = ws.Cells(k, 12).Value
+            
+            Dim previous_volume As Double
+            previous_volume = ws.Cells(last_k, 12).Value
+            
+            Dim increase_name As Double
+            increase_name = 0
+            
+            Dim greatest_name As Double
+            greatest_name = 0
+            
+            
+            If Increase > current_k And Increase > previous_k Then
+               Increase = Increase
+               
+            ElseIf current_k > Increase And current_k > previous_k Then
+                Increase = current_k
+                increase_name = ws.Cells(row, 9).Value
+                
+            ElseIf previous_k > Increase And previous_k > current_k Then
+                Increase = previous_k
+                increase_name = ws.Cells(last_k, 9).Value
+                
+            End If
+            
+            If Greatest > volume_k And Greatest > previous_volume Then
+                Greatest = Greatest
+                
+            ElseIf volume_k > Greatest And volume_k > previous_volume Then
+                Greatest = volume_k
+                
+            ElseIf previous_volume > Greatest And previous_volume > volume_k Then
+                Greatest = previous_volume
+                greatest_name = ws.Cells(last_k, 9).volume
+                
+            End If
+            
+        Next k
+                
+    Next ws
+    
+
+End Sub
